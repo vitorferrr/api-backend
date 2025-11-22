@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import jwt from 'jsonwebtoken';
+import jwt = require('jsonwebtoken');
 
 export const login = (req: Request, res: Response) => {
   const { email, password } = req.body;

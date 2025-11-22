@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { getDashboardData } from './dashboard.controller';
-import { verifyToken } from '../middlewares/auth.middleware'; // Importe o segurança
+import { verifyToken } from '../middlewares/auth.middleware';
 
 const router = Router();
 
@@ -11,14 +11,13 @@ const router = Router();
  * summary: Retorna dados e KPIs das escolas
  * tags: [Dashboard]
  * security:
- * - bearerAuth: []     <-- Isso avisa ao Swagger que precisa de cadeado
+ * - bearerAuth: []
  * responses:
  * 200:
  * description: Dados carregados com sucesso
  * 401:
  * description: Não autorizado
  */
-// Adicione o verifyToken ANTES do getDashboardData
 router.get('/', verifyToken, getDashboardData);
 
 export default router;
