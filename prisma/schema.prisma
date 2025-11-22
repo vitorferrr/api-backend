@@ -1,0 +1,23 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  createdAt DateTime @default(now())
+}
+
+// Exemplo de entidade para o Dashboard
+model Metric {
+  id        String   @id @default(cuid())
+  label     String
+  value     Float
+  createdAt DateTime @default(now())
+}

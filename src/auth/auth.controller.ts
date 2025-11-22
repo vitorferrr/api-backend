@@ -1,0 +1,20 @@
+import { Request, Response } from 'express';
+import jwt from 'jsonwebtoken';
+
+export const login = (req: Request, res: Response) => {
+  const { email, password } = req.body;
+
+  // Lógica Fixa Solicitada
+  // OBS: Em produção, buscaria no banco via Prisma e compararia hash
+  if (email === 'Vitor' && password === '123456') {
+    const token = jwt.sign(
+      { user: 'Vitor', role: 'admin' }, 
+      process.env.JWT_SECRET || 'secret', 
+      { expiresIn: '1h' }
+    );
+    
+    return res.json({ auth: true, token });
+  }
+
+  return res.status(401).json({ message: 'Login inválido' });
+};
