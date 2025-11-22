@@ -2,11 +2,12 @@ import { Request, Response } from 'express';
 import jwt = require('jsonwebtoken');
 
 export const login = (req: Request, res: Response) => {
-  const { email, password } = req.body;
+  const { user, password } = req.body;
 
+  console.log('Tentativa de login:', { user, password });
   // Lógica Fixa Solicitada
   // OBS: Em produção, buscaria no banco via Prisma e compararia hash
-  if (email === 'Vitor' && password === '123456') {
+  if (user === 'Vitor' && password === '123456') {
     const token = jwt.sign(
       { user: 'Vitor', role: 'admin' }, 
       process.env.JWT_SECRET || 'secret', 
