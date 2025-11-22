@@ -7,7 +7,7 @@ export const login = (req: Request, res: Response) => {
   console.log('Tentativa de login:', { user, password });
   // Lógica Fixa Solicitada
   // OBS: Em produção, buscaria no banco via Prisma e compararia hash
-  if (user === 'Vitor' && password === '123456') {
+  if (user.toLowerCase() === 'Vitor' && password === '123456') {
     const token = jwt.sign(
       { user: 'Vitor', role: 'admin' }, 
       process.env.JWT_SECRET || 'secret', 
