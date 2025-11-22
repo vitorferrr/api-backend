@@ -7,17 +7,114 @@ datasource db {
   provider = "postgresql"
 }
 
-model User {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  password  String
-  createdAt DateTime @default(now())
+model abastecimento_hidrico {
+  id_abastecimento         Int                        @id @default(autoincrement())
+  tipo_abastecimento       String                     @db.VarChar(100)
+  escola_tem_abastecimento escola_tem_abastecimento[]
 }
 
-// Exemplo de entidade para o Dashboard
-model Metric {
-  id        String   @id @default(cuid())
-  label     String
-  value     Float
-  createdAt DateTime @default(now())
+model dependencia_escolar {
+  id_dependencia   Int      @id @default(autoincrement())
+  tipo_dependencia String   @db.VarChar(50)
+  escola           escola[]
+}
+
+model escola {
+  id_escola                    Int                           @id @default(autoincrement())
+  nome_escola                  String                        @db.VarChar(255)
+  endereco                     String?                       @db.VarChar(150)
+  num_endereco                 String?                       @db.VarChar(20)
+  nome_bairro                  String?                       @db.VarChar(100)
+  id_bairro                    String?                       @db.VarChar(50)
+  cep                          String?                       @db.VarChar(9)
+  nome_municipio               String?                       @db.VarChar(100)
+  id_municipio                 Int?
+  nome_uf                      String?                       @db.VarChar(50)
+  id_uf                        Int?
+  id_regiao                    Int?
+  id_localizacao_dif           Int?
+  id_localizacao               Int?
+  id_dependencia               Int?
+  dependencia_escolar          dependencia_escolar?          @relation(fields: [id_dependencia], references: [id_dependencia], onDelete: NoAction, onUpdate: NoAction)
+  localizacao_geo_diferenciada localizacao_geo_diferenciada? @relation(fields: [id_localizacao_dif], references: [id_localizacao_dif], onDelete: NoAction, onUpdate: NoAction)
+  localizacao_geografica       localizacao_geografica?       @relation(fields: [id_localizacao], references: [id_localizacao], onDelete: NoAction, onUpdate: NoAction)
+  regiao                       regiao?                       @relation(fields: [id_regiao], references: [id_regiao], onDelete: NoAction, onUpdate: NoAction)
+  escola_tem_abastecimento     escola_tem_abastecimento[]
+  escola_tem_tratamento        escola_tem_tratamento[]
+}
+
+model escola_tem_abastecimento {
+  id_escola             Int
+  id_abastecimento      Int
+  abastecimento_hidrico abastecimento_hidrico @relation(fields: [id_abastecimento], references: [id_abastecimento], onDelete: NoAction, onUpdate: NoAction)
+  escola                escola                @relation(fields: [id_escola], references: [id_escola], onDelete: Cascade, onUpdate: NoAction)
+
+  @@id([id_escola, id_abastecimento])
+}
+
+model escola_tem_tratamento {
+  id_escola            Int
+  id_tratamento        Int
+  escola               escola               @relation(fields: [id_escola], references: [id_escola], onDelete: Cascade, onUpdate: NoAction)
+  tratamento_sanitario tratamento_sanitario @relation(fields: [id_tratamento], references: [id_tratamento], onDelete: NoAction, onUpdate: NoAction)
+
+  @@id([id_escola, id_tratamento])
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model importacao_bruta {
+  nome_regiao              String? @db.VarChar(20)
+  id_regiao                Int?
+  nome_uf                  String? @db.VarChar(50)
+  id_uf                    Int?
+  nome_municipio           String? @db.VarChar(150)
+  id_municipio             Int?
+  nome_bairro              String? @db.VarChar(100)
+  id_bairro                Int?
+  nome_escola              String? @db.VarChar(100)
+  id_escola                Int?
+  tipo_dependencia         Int?
+  localizacao              Int?
+  localizacao_diferenciada Int?
+  endereco                 String? @db.VarChar(100)
+  num_endereco             String? @db.VarChar(10)
+  cep                      String? @db.VarChar(8)
+  in_agua_potavel          Int?
+  in_agua_rede_publica     Int?
+  in_agua_poco_artesiano   Int?
+  in_agua_cacimba          Int?
+  in_agua_fonte_rio        Int?
+  in_agua_inexistente      Int?
+  in_agua_carro_pipa       Int?
+  in_esgoto_rede_publica   Int?
+  in_esgoto_fossa_septica  Int?
+  in_esgoto_fossa_comum    Int?
+  in_esgoto_fossa          Int?
+  in_esgoto_inexistente    Int?
+
+  @@ignore
+}
+
+model localizacao_geo_diferenciada {
+  id_localizacao_dif   Int      @id @default(autoincrement())
+  tipo_localizacao_dif String   @db.VarChar(50)
+  escola               escola[]
+}
+
+model localizacao_geografica {
+  id_localizacao   Int      @id @default(autoincrement())
+  tipo_localizacao String   @db.VarChar(50)
+  escola           escola[]
+}
+
+model regiao {
+  id_regiao   Int      @id @default(autoincrement())
+  nome_regiao String   @db.VarChar(50)
+  escola      escola[]
+}
+
+model tratamento_sanitario {
+  id_tratamento         Int                     @id @default(autoincrement())
+  tipo_tratamento       String                  @db.VarChar(100)
+  escola_tem_tratamento escola_tem_tratamento[]
 }
