@@ -42,8 +42,8 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         with:
           args: >
-            -Dsonar.organization=SEU_ORG_NO_SONAR     # <--- TROQUE PELO SUA ORG
-            -Dsonar.projectKey=SEU_PROJETO_BACKEND    # <--- TROQUE PELA KEY DO PROJETO
+            -Dsonar.organization=Vitor dos Santos Ferreira  
+            -Dsonar.projectKey=API_backend 
             -Dsonar.sources=src
             -Dsonar.tests=src
             -Dsonar.test.inclusions=**/*.test.ts
