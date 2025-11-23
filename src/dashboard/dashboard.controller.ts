@@ -9,8 +9,6 @@ export const getDashboardData = async (req: Request, res: Response) => {
     const totalEscolas = await prisma.escola.count();
 
     // 2. Dados para o Gráfico (Agrupado por Região)
-    // Vamos buscar todas as regiões e contar quantas escolas tem em cada uma
-    // Essa query é mais segura que o rawQuery para evitar erros de BigInt
     const escolasPorRegiao = await prisma.regiao.findMany({
       select: {
         nome_regiao: true,
