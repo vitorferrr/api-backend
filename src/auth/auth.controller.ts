@@ -10,7 +10,7 @@ export const login = (req: Request, res: Response) => {
   if (user.toLowerCase() === 'Vitor' && password === '123456') {
     const token = jwt.sign(
       { user: 'Vitor', role: 'admin' }, 
-      process.env.JWT_SECRET || 'secret', 
+      process.env.JWT_SECRET || 'uma_chave_segura', 
       { expiresIn: '1h' }
     );
     

@@ -18,6 +18,10 @@ const options = {
             {
                 url: 'http://localhost:3000/api',
             },
+            {
+                url: 'https://api-backend-hmfk.onrender.com',
+                description: 'Servidor de produção (render)'
+            },
         ],
         components: {
             securitySchemes: {

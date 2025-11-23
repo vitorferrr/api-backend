@@ -19,7 +19,7 @@ export const verifyToken = (req: Request, res: Response, next: NextFunction) => 
 
   try {
     // 4. Verifica se a assinatura do token bate com a nossa senha secreta
-    jwt.verify(token, process.env.JWT_SECRET || 'secret');
+    jwt.verify(token, process.env.JWT_SECRET || 'uma_chave_segura');
     
     // 5. Se deu certo, deixa a requisição passar para o Controller
     next();
