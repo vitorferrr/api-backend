@@ -3,6 +3,7 @@ import cors from 'cors';
 import authRoutes from './auth/auth.routes';
 import dashboardRoutes from './dashboard/dashboard.routes';
 import { setupSwagger } from './docs/swagger';
+import escolasRoutes from './escolas/escolas.routes';
 
 const app = express();
 
@@ -11,7 +12,8 @@ app.use(express.json());
 
 // Rotas
 app.use('/api/auth', authRoutes);
-app.use('/api/dashboard', dashboardRoutes)
+app.use('/api/dashboard', dashboardRoutes);
+app.use('/api/escolas', escolasRoutes);
 
 // Config Swagger
 setupSwagger(app);
