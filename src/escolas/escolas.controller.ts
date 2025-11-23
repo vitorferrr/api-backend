@@ -34,8 +34,6 @@ export const getEscolas = async (req: Request, res: Response) => {
         nome_escola: true,
         nome_municipio: true,
         nome_uf: true,
-        // --- AQUI ESTÁ A CORREÇÃO DO N/A ---
-        // Temos que pedir explicitamente para trazer os dados dessas tabelas
         dependencia_escolar: { select: { tipo_dependencia: true } },
         regiao: { select: { nome_regiao: true } },
         localizacao_geografica: { select: { tipo_localizacao: true } } 
