@@ -5,50 +5,38 @@ const prisma = new PrismaClient();
 
 export const getDashboardData = async (req: Request, res: Response) => {
   try {
-    // 1. Contagem total de escolas
+    // 1. Total de Escolas
     const totalEscolas = await prisma.escola.count();
 
-    // 2. Agrupar escolas por Região (Ex: Norte, Sul...)
-    // O prisma faz isso usando o relacionamento com a tabela 'regiao'
-    const escolasPorRegiao = await prisma.escola.groupBy({
-      by: ['id_regiao'],
-      _count: {
-        id_escola: true,
-      },
-    });
-
-    // Como o groupBy devolve apenas o ID, vamos buscar os nomes das regiões manualmente ou tratar no front
-    // Uma query crua as vezes é mais simples para joins complexos em Dashboards:
-    const dadosGrafico = await prisma.$queryRaw`
-      SELECT r.nome_regiao as name, COUNT(e.id_escola) as value
-      FROM escola e
-      JOIN regiao r ON e.id_regiao = r.id_regiao
-      GROUP BY r.nome_regiao
-    `;
-
-    // 3. Buscar algumas escolas para listar na tabela (limitado a 10 para não travar)
-    const listaEscolas = await prisma.escola.findMany({
-      take: 10,
+    // 2. Dados para o Gráfico (Agrupado por Região)
+    // Vamos buscar todas as regiões e contar quantas escolas tem em cada uma
+    // Essa query é mais segura que o rawQuery para evitar erros de BigInt
+    const escolasPorRegiao = await prisma.regiao.findMany({
       select: {
-        id_escola: true,
-        nome_escola: true,
-        nome_municipio: true,
-        nome_uf: true,
+        nome_regiao: true,
+        _count: {
+          select: { escola: true } // Conta escolas ligadas a essa região
+        }
       }
     });
+
+    // Formata para o padrão que o ECharts gosta: { name: 'Norte', value: 10 }
+    const dadosGrafico = escolasPorRegiao.map(item => ({
+      name: item.nome_regiao,
+      value: item._count.escola
+    }));
 
     return res.json({
       kpis: {
         totalEscolas,
       },
       charts: {
-        byRegion: dadosGrafico, // Isso vai direto para o ECharts
-      },
-      table: listaEscolas
+        byRegion: dadosGrafico,
+      }
     });
 
   } catch (error) {
-    console.error(error);
+    console.error("Erro no Dashboard:", error);
     return res.status(500).json({ error: 'Erro ao buscar dados do dashboard' });
   }
 };
