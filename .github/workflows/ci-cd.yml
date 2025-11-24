@@ -28,7 +28,6 @@ jobs:
       - name: Rodar Lint (Verificar código)
         run: npm run lint
 
-      # Se você não tiver testes ainda, pode comentar as 2 linhas abaixo com #
       - name: Rodar Testes
         run: npm run test
 
