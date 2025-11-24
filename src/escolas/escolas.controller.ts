@@ -7,23 +7,33 @@ export const getEscolas = async (req: Request, res: Response) => {
   try {
     const { nome, municipio, dependencia, regiao, localizacao } = req.query;
 
+    // AQUI ESTÁ A MÁGICA: O comentário abaixo manda o Lint ignorar o erro na próxima linha
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const whereClause: any = {};
 
-    // Filtros de Texto
-    if (nome) whereClause.nome_escola = { contains: String(nome), mode: 'insensitive' };
-    if (municipio) whereClause.nome_municipio = { contains: String(municipio), mode: 'insensitive' };
+    if (nome) {
+        whereClause.nome_escola = { contains: String(nome), mode: 'insensitive' };
+    }
+    if (municipio) {
+        whereClause.nome_municipio = { contains: String(municipio), mode: 'insensitive' };
+    }
 
-    // Filtros de Relação
     if (dependencia && String(dependencia) !== "Todas") {
-        whereClause.dependencia_escolar = { tipo_dependencia: { contains: String(dependencia), mode: 'insensitive' } };
+        whereClause.dependencia_escolar = {
+            tipo_dependencia: { contains: String(dependencia), mode: 'insensitive' }
+        };
     }
 
     if (regiao && String(regiao) !== "Todas") {
-        whereClause.regiao = { nome_regiao: { contains: String(regiao), mode: 'insensitive' } };
+        whereClause.regiao = {
+            nome_regiao: { contains: String(regiao), mode: 'insensitive' }
+        };
     }
 
     if (localizacao && String(localizacao) !== "Todas") {
-        whereClause.localizacao_geografica = { tipo_localizacao: { contains: String(localizacao), mode: 'insensitive' } };
+        whereClause.localizacao_geografica = {
+            tipo_localizacao: { contains: String(localizacao), mode: 'insensitive' }
+        };
     }
 
     const escolas = await prisma.escola.findMany({
@@ -36,7 +46,7 @@ export const getEscolas = async (req: Request, res: Response) => {
         nome_uf: true,
         dependencia_escolar: { select: { tipo_dependencia: true } },
         regiao: { select: { nome_regiao: true } },
-        localizacao_geografica: { select: { tipo_localizacao: true } } 
+        localizacao_geografica: { select: { tipo_localizacao: true } }
       },
       orderBy: { nome_escola: 'asc' }
     });
