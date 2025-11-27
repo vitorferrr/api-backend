@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { login } from './auth.controller';
+import { login, register } from './auth.controller';
 
 const router = Router();
 
@@ -25,5 +25,6 @@ const router = Router();
  * description: Login sucesso
  */
 router.post('/login', login);
+router.post('/register', register);
 
 export default router;

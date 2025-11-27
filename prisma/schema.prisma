@@ -118,3 +118,11 @@ model tratamento_sanitario {
   tipo_tratamento       String                  @db.VarChar(100)
   escola_tem_tratamento escola_tem_tratamento[]
 }
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String   // Em produção usaria bcrypt, aqui vamos simplificar
+  name      String?
+  createdAt DateTime @default(now())
+}
