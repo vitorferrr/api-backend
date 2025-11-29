@@ -5,20 +5,20 @@ const prisma = new PrismaClient();
 
 export const getDashboardData = async (req: Request, res: Response) => {
   try {
-    // 1. Total de Escolas
+    // Total de Escolas
     const totalEscolas = await prisma.escola.count();
 
-    // 2. Dados para o Gráfico (Agrupado por Região)
+    // Dados para o Gráfico 
     const escolasPorRegiao = await prisma.regiao.findMany({
       select: {
         nome_regiao: true,
         _count: {
-          select: { escola: true } // Conta escolas ligadas a essa região
+          select: { escola: true }
         }
       }
     });
 
-    // Formata para o padrão que o ECharts gosta: { name: 'Norte', value: 10 }
+    // Formata para o padrão ECharts
     const dadosGrafico = escolasPorRegiao.map(item => ({
       name: item.nome_regiao,
       value: item._count.escola

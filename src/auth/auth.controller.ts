@@ -20,8 +20,8 @@ export const login = async (req: Request, res: Response) => {
     }
 
     const token = jwt.sign(
-      { id: user.id, email: user.email, role: 'user' }, // Payload
-      process.env.JWT_SECRET || 'uma_chave_segura',     // Secret
+      { id: user.id, email: user.email, role: 'user' }, 
+      process.env.JWT_SECRET || 'uma_chave_segura',    
       { expiresIn: '1h' }
     );
 

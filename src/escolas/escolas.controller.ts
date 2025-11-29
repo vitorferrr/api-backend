@@ -7,7 +7,6 @@ export const getEscolas = async (req: Request, res: Response) => {
   try {
     const { nome, municipio, dependencia, regiao, localizacao } = req.query;
 
-    // AQUI ESTÁ A MÁGICA: O comentário abaixo manda o Lint ignorar o erro na próxima linha
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const whereClause: any = {};
 
